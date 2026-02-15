@@ -29,9 +29,11 @@ export default function App() {
         </Stack>
       </Cluster>
       <Cluster>
-        <div>
-          <p>Content</p>
-        </div>
+        <ContentBase radius='m' padding={1}>
+          <Center>
+            メイン画面
+          </Center>
+        </ContentBase>
         <ChatDiv>
           <Base radius='m' padding={1}>
             <Heading>チャット</Heading>
@@ -48,8 +50,14 @@ export default function App() {
   )
 }
 
+// WIP: サイズは100% - チャット欄を横幅として、6:4で高さを決める
+const ContentBase = styled(Base)`
+  width: 600px;
+  height: 400px;
+`
+
 const ChatDiv = styled.div`
-  width: 200px;
+  width: 300px;
 `
 
 const LiveBase = styled(Base)`
