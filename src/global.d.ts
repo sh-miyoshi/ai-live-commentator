@@ -5,7 +5,7 @@ declare global {
     api: {
       chat: (payload: {
         title: string
-      }) => Promise<ChatMessage[]>;
+      }) => Promise<Omit<ChatMessage, "isStreamer">[]>;
     };
   }
 }

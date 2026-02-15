@@ -1,24 +1,40 @@
-import { Base, Button, Center, Cluster, Heading, Stack, Text } from 'smarthr-ui'
+import {
+  Base,
+  Button,
+  Center,
+  Cluster,
+  Heading,
+  Input,
+  Stack,
+  Text
+} from 'smarthr-ui'
 import styled from 'styled-components'
 import { Avatar, UserAvatar } from './avatar'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export type ChatMessage = {
   id: string
   user: string
   message: string
+  isStreamer: boolean
 }
 
 export default function App () {
   const [chats, setChats] = useState<ChatMessage[]>([])
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined)
+  const [sendMessage, setSendMessage] = useState('')
 
   const title = '雑談配信'
+  const streamerName = 'test_user'
   const fetchChats = async () => {
     try {
       const fetchedChats = await window.api.chat({ title })
       setChats(prevChats => {
-        const newChats = prevChats.concat(fetchedChats)
+        const newChats = prevChats.concat(
+          fetchedChats.map(
+            chat => ({ ...chat, isStreamer: false } as ChatMessage)
+          )
+        )
         console.log('fetched chats: ', fetchedChats)
         console.log('new chats: ', newChats)
         return newChats
@@ -50,7 +66,11 @@ export default function App () {
               {chats.map(chat => (
                 <div key={chat.id}>
                   <ChatRow>
-                    <UserAvatar userName={chat.user} size={24} />
+                    {chat.isStreamer ? (
+                      <Avatar src='../resources/icon.png' size={24} />
+                    ) : (
+                      <UserAvatar userName={chat.user} size={24} />
+                    )}
                     <Stack gap={0.125}>
                       <Text size='XS'>{chat.user}</Text>
                       <Text>{chat.message}</Text>
@@ -58,6 +78,32 @@ export default function App () {
                   </ChatRow>
                 </div>
               ))}
+
+              <Cluster>
+                <Input
+                  type='text'
+                  value={sendMessage}
+                  onChange={e => {
+                    setSendMessage(e.target.value)
+                  }}
+                />
+                <Button
+                  onClick={() => {
+                    setChats(prevChats => {
+                      const newChats = prevChats.concat({
+                        id: 'temp-id',
+                        user: streamerName,
+                        message: sendMessage,
+                        isStreamer: true
+                      })
+                      return newChats
+                    })
+                    setSendMessage('')
+                  }}
+                >
+                  送信
+                </Button>
+              </Cluster>
 
               {intervalId ? (
                 <Button
