@@ -36,13 +36,20 @@ export default function App() {
         </ContentBase>
         <ChatDiv>
           <Base radius='m' padding={1}>
-            <Heading>チャット</Heading>
-            {chats.map(chat => (
-              <div key={chat.id}>
-                <UserAvatar userName={chat.user} size={24} />
-                <strong>{chat.user}:</strong> {chat.message}
-              </div>
-            ))}
+            <Stack>
+              <Heading>チャット</Heading>
+              {chats.map(chat => (
+                <div key={chat.id}>
+                  <ChatRow>
+                    <UserAvatar userName={chat.user} size={24} />
+                    <Stack gap={0.125}>
+                      <Text size="XS">{chat.user}</Text>
+                      <Text>{chat.message}</Text>
+                    </Stack>
+                  </ChatRow>
+                </div>
+              ))}
+            </Stack>
           </Base>
         </ChatDiv>
       </Cluster>
@@ -58,6 +65,10 @@ const ContentBase = styled(Base)`
 
 const ChatDiv = styled.div`
   width: 300px;
+`
+
+const ChatRow = styled(Cluster)`
+  align-items: center;
 `
 
 const LiveBase = styled(Base)`
