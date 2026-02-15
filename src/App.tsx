@@ -23,12 +23,13 @@ export default function App () {
   const [chats, setChats] = useState<ChatMessage[]>([])
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined)
   const [sendMessage, setSendMessage] = useState('')
+  const [lastMessage, setLastMessage] = useState('')
 
   const title = '雑談配信'
-  const streamerName = 'test_user'
+  const streamerName = '配信者'
   const fetchChats = async () => {
     try {
-      const fetchedChats = await window.api.chat({ title })
+      const fetchedChats = await window.api.chat({ title, context: lastMessage })
       setChats(prevChats => {
         const newChats = prevChats.concat(
           fetchedChats.map(
@@ -98,6 +99,7 @@ export default function App () {
                       })
                       return newChats
                     })
+                    setLastMessage(sendMessage)
                     setSendMessage('')
                   }}
                 >
@@ -120,7 +122,7 @@ export default function App () {
                   variant='primary'
                   onClick={() => {
                     fetchChats()
-                    const id = window.setInterval(fetchChats, 5000)
+                    const id = window.setInterval(fetchChats, 10000)
                     console.log('set interval: ', id)
                     setIntervalId(id)
                   }}
