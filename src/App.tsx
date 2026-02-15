@@ -1,19 +1,30 @@
 import { Base, Center, Cluster, Heading, Stack, Text } from 'smarthr-ui'
 import styled from 'styled-components'
 import { Avatar, UserAvatar } from './avatar'
+import { useEffect, useState } from 'react'
 
-type ChatMessage = {
+export type ChatMessage = {
   id: string
   user: string
   message: string
 }
 
 export default function App() {
+  const [chats, setChats] = useState<ChatMessage[]>([])
+
   const title = '雑談配信'
-  const chats: ChatMessage[] = [
-    { id: '1', user: 'Alice', message: 'Hello!' },
-    { id: '2', user: 'Bob', message: 'Hi there!' }
-  ]
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const chats = await window.api.chat()
+        setChats(chats)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    fetchChats()
+  }, [])
 
   return (
     <Stack>
@@ -38,7 +49,7 @@ export default function App() {
           <Base radius='m' padding={1}>
             <Stack>
               <Heading>チャット</Heading>
-              {chats.map(chat => (
+              {chats && chats.map(chat => (
                 <div key={chat.id}>
                   <ChatRow>
                     <UserAvatar userName={chat.user} size={24} />
