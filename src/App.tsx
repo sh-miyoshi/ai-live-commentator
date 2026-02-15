@@ -142,6 +142,7 @@ export default function App () {
 const ContentBase = styled(Base)`
   width: 600px;
   height: 400px;
+  background-color: #c9c9c9;
 `
 
 const ChatDiv = styled.div`
