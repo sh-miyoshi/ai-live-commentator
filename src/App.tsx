@@ -10,7 +10,7 @@ import {
 } from 'smarthr-ui'
 import styled from 'styled-components'
 import { Avatar, UserAvatar } from './avatar'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export type ChatMessage = {
   id: string
@@ -23,13 +23,21 @@ export default function App () {
   const [chats, setChats] = useState<ChatMessage[]>([])
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined)
   const [sendMessage, setSendMessage] = useState('')
-  const [lastMessage, setLastMessage] = useState('')
+
+  const lastMessageRef = useRef('こんにちはー')
+  const isFetchRef = useRef(false)
 
   const title = '雑談配信'
   const streamerName = '配信者'
   const fetchChats = async () => {
+    if (isFetchRef.current) {
+      console.log('already fetching... skip')
+      return
+    }
+
     try {
-      const fetchedChats = await window.api.chat({ title, context: lastMessage })
+      isFetchRef.current = true
+      const fetchedChats = await window.api.chat({ title, context: lastMessageRef.current })
       setChats(prevChats => {
         const newChats = prevChats.concat(
           fetchedChats.map(
@@ -40,6 +48,7 @@ export default function App () {
         console.log('new chats: ', newChats)
         return newChats
       })
+      isFetchRef.current = false
     } catch (e) {
       console.log(e)
     }
@@ -99,7 +108,7 @@ export default function App () {
                       })
                       return newChats
                     })
-                    setLastMessage(sendMessage)
+                    lastMessageRef.current = sendMessage
                     setSendMessage('')
                   }}
                 >

@@ -82,7 +82,19 @@ const generatedName = () => {
     'Nymlas',
     'Galmir',
     'Fenrian',
-    'Aradir'
+    'Aradir',
+    'Zarath',
+    'Kaelwen',
+    'Raeiel',
+    'Lyrlas',
+    'Raeion',
+    'Nymrian',
+    'Thalen',
+    'Morath',
+    'Lyrath',
+    'Raeiel',
+    'Zarlas',
+    'Eldath'
   ]
 
   return names[Math.floor(Math.random() * names.length)]
