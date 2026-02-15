@@ -1,15 +1,11 @@
 import { Base, Cluster, Heading, Stack } from 'smarthr-ui'
 import styled from 'styled-components'
+import { Avatar, UserAvatar } from './avatar'
 
 type ChatMessage = {
   id: string
   user: string
   message: string
-}
-
-type AvatarProps = {
-  src: string
-  size?: number // px
 }
 
 export default function App () {
@@ -33,6 +29,7 @@ export default function App () {
             <Heading>チャット</Heading>
             {chats.map(chat => (
               <div key={chat.id}>
+                <UserAvatar userName={chat.user} size={24} />
                 <strong>{chat.user}:</strong> {chat.message}
               </div>
             ))}
@@ -43,21 +40,6 @@ export default function App () {
   )
 }
 
-const Avatar = ({ src, size = 64 }: AvatarProps) => {
-  return (
-    <img
-      src={src}
-      alt='avatar'
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        objectFit: 'cover', // 中央トリミング
-        display: 'block'
-      }}
-    />
-  )
-}
 
 const ChatDiv = styled.div`
   width: 200px;
