@@ -34,8 +34,8 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-ipcMain.handle("chat", () => {
-  console.log("callme")
+ipcMain.handle("chat", (_, payload:{title: string}) => {
+  console.log("title: ", payload.title)
 
   return [
     { id: '1', user: 'Alice', message: 'Hello!' },

@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
-  chat: () => ipcRenderer.invoke("chat"),
+  chat: (payload: {
+    title: string
+  }) => ipcRenderer.invoke("chat", payload),
 });

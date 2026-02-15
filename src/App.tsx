@@ -16,7 +16,7 @@ export default function App () {
   const title = '雑談配信'
   const fetchChats = async () => {
     try {
-      const fetchedChats = await window.api.chat()
+      const fetchedChats = await window.api.chat({ title })
       setChats(prevChats => {
         const newChats = prevChats.concat(fetchedChats)
         console.log('fetched chats: ', fetchedChats)
