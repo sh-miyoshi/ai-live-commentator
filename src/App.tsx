@@ -1,8 +1,13 @@
 import {
+  ActionDialog,
   Base,
   Button,
   Center,
   Cluster,
+  Dropdown,
+  DropdownContent,
+  DropdownTrigger,
+  FaEllipsisIcon,
   Heading,
   Input,
   Stack,
@@ -23,6 +28,7 @@ export default function App () {
   const [chats, setChats] = useState<ChatMessage[]>([])
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined)
   const [sendMessage, setSendMessage] = useState('')
+  const [isSettingDialogOpen, setIsSettingDialogOpen] = useState(false)
 
   const lastMessageRef = useRef('こんにちはー')
   const isFetchRef = useRef(false)
@@ -37,7 +43,10 @@ export default function App () {
 
     try {
       isFetchRef.current = true
-      const fetchedChats = await window.api.chat({ title, context: lastMessageRef.current })
+      const fetchedChats = await window.api.chat({
+        title,
+        context: lastMessageRef.current
+      })
       setChats(prevChats => {
         const newChats = prevChats.concat(
           fetchedChats.map(
@@ -56,15 +65,70 @@ export default function App () {
 
   return (
     <Stack>
-      <Cluster>
-        <Avatar src='../resources/icon.png' />
-        <Stack gap={0.25}>
-          <LiveBase padding={0.25}>
-            <Center>LIVE</Center>
-          </LiveBase>
-          <Heading>{title}</Heading>
-        </Stack>
-      </Cluster>
+      <TitleCluster justify='space-between'>
+        <Cluster>
+          <Avatar src='../resources/icon.png' />
+          <Stack gap={0.25}>
+            {intervalId ? (
+            <LiveBase padding={0.25}>
+              <Center>LIVE</Center>
+            </LiveBase>
+            ):(
+            <WaitingBase padding={0.25}>
+              <Center>待機中</Center>
+            </WaitingBase>
+            )}
+            <Heading>{title}</Heading>
+          </Stack>
+        </Cluster>
+        <div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button>
+                <FaEllipsisIcon />
+              </Button>
+            </DropdownTrigger>
+            <DropdownContent>
+              <ul>
+                <li>
+                  <SettingButton
+                    variant='text'
+                    onClick={() => setIsSettingDialogOpen(true)}
+                  >
+                    設定
+                  </SettingButton>
+                </li>
+                <li>
+                  {intervalId ? (
+                    <SettingButton
+                      variant='text'
+                      onClick={() => {
+                        console.log('clear interval: ', intervalId)
+                        clearInterval(intervalId)
+                        setIntervalId(undefined)
+                      }}
+                    >
+                      配信を停止
+                    </SettingButton>
+                  ) : (
+                    <SettingButton
+                      variant='text'
+                      onClick={() => {
+                        fetchChats()
+                        const id = window.setInterval(fetchChats, 10000)
+                        console.log('set interval: ', id)
+                        setIntervalId(id)
+                      }}
+                    >
+                      配信を開始する
+                    </SettingButton>
+                  )}
+                </li>
+              </ul>
+            </DropdownContent>
+          </Dropdown>
+        </div>
+      </TitleCluster>
       <Cluster>
         <ContentBase radius='m' padding={1}>
           <Center>メイン画面</Center>
@@ -115,34 +179,21 @@ export default function App () {
                   送信
                 </Button>
               </Cluster>
-
-              {intervalId ? (
-                <Button
-                  onClick={() => {
-                    console.log('clear interval: ', intervalId)
-                    clearInterval(intervalId)
-                    setIntervalId(undefined)
-                  }}
-                >
-                  停止
-                </Button>
-              ) : (
-                <Button
-                  variant='primary'
-                  onClick={() => {
-                    fetchChats()
-                    const id = window.setInterval(fetchChats, 10000)
-                    console.log('set interval: ', id)
-                    setIntervalId(id)
-                  }}
-                >
-                  開始
-                </Button>
-              )}
             </Stack>
           </Base>
         </ChatDiv>
       </Cluster>
+      <ActionDialog
+        title='設定'
+        actionText='OK'
+        onClickAction={() => {}}
+        onClickClose={() => {
+          setIsSettingDialogOpen(false)
+        }}
+        isOpen={isSettingDialogOpen}
+      >
+        テストメッセージ
+      </ActionDialog>
     </Stack>
   )
 }
@@ -165,4 +216,18 @@ const ChatRow = styled(Cluster)`
 const LiveBase = styled(Base)`
   background-color: #e0664f;
   width: 46px;
+`
+
+const WaitingBase = styled(Base)`
+  background-color: #9A9493;
+  width: 52px;
+`
+
+const SettingButton = styled(Button)`
+  width: 140px;
+  justify-content: flex-start;
+`
+
+const TitleCluster = styled(Cluster)`
+  padding: 0.25rem 1.5rem 0.25rem 0.25rem;
 `
