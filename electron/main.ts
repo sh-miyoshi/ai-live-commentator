@@ -5,7 +5,7 @@ const DEV_URL = "http://localhost:5173";
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 980,
+    width: 990,
     height: 720,
     webPreferences: {
       preload: path.join(app.getAppPath(), "dist-electron", "preload.js"),
@@ -38,7 +38,6 @@ ipcMain.handle("chat", (_, payload:{title: string}) => {
   console.log("title: ", payload.title)
 
   return [
-    { id: '1', user: 'Alice', message: 'Hello!' },
-    { id: '2', user: 'Bob', message: 'Hi there!' }
+    { id: crypto.randomUUID(), user: 'Alice', message: 'Hello!' },
   ];
 });

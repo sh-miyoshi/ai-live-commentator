@@ -91,7 +91,7 @@ export default function App () {
                   onClick={() => {
                     setChats(prevChats => {
                       const newChats = prevChats.concat({
-                        id: 'temp-id',
+                        id: crypto.randomUUID(),
                         user: streamerName,
                         message: sendMessage,
                         isStreamer: true
