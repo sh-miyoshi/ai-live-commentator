@@ -1,4 +1,4 @@
-import { Base, Cluster, Heading, Stack } from 'smarthr-ui'
+import { Base, Center, Cluster, Heading, Stack, Text } from 'smarthr-ui'
 import styled from 'styled-components'
 import { Avatar, UserAvatar } from './avatar'
 
@@ -8,7 +8,7 @@ type ChatMessage = {
   message: string
 }
 
-export default function App () {
+export default function App() {
   const title = '雑談配信'
   const chats: ChatMessage[] = [
     { id: '1', user: 'Alice', message: 'Hello!' },
@@ -19,6 +19,14 @@ export default function App () {
     <Stack>
       <Cluster>
         <Avatar src='../resources/icon.png' />
+        <Stack gap={0.25}>
+          <LiveBase padding={0.25}>
+            <Center>
+              LIVE
+            </Center>
+          </LiveBase>
+          <Heading>{title}</Heading>
+        </Stack>
       </Cluster>
       <Cluster>
         <div>
@@ -40,7 +48,11 @@ export default function App () {
   )
 }
 
-
 const ChatDiv = styled.div`
   width: 200px;
+`
+
+const LiveBase = styled(Base)`
+  background-color: #E0664F;
+  width: 46px;
 `
