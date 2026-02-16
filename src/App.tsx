@@ -112,7 +112,7 @@ export default function App () {
                     </SettingButton>
                   ) : (
                     <SettingButton
-                      variant='text'
+                      variant='danger'
                       onClick={() => {
                         fetchChats()
                         const id = window.setInterval(fetchChats, 10000)
@@ -192,7 +192,7 @@ export default function App () {
         }}
         isOpen={isSettingDialogOpen}
       >
-        テストメッセージ
+        テストメッセージ(タイトル、配信者名、アイコン)
       </ActionDialog>
     </Stack>
   )
