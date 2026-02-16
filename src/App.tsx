@@ -32,8 +32,9 @@ export default function App () {
   const [isSettingDialogOpen, setIsSettingDialogOpen] = useState(false)
   const [title, setTitle] = useState('雑談配信')
   const [streamerName, setStreamerName] = useState('配信者')
-
-  // WIP: title, streamerNameは固定する
+  // ダイアログ用一時state
+  const [tempTitle, setTempTitle] = useState(title)
+  const [tempStreamerName, setTempStreamerName] = useState(streamerName)
 
   const lastMessageRef = useRef('こんにちはー')
   const isFetchRef = useRef(false)
@@ -96,7 +97,11 @@ export default function App () {
                 <li>
                   <SettingButton
                     variant='text'
-                    onClick={() => setIsSettingDialogOpen(true)}
+                    onClick={() => {
+                      setTempTitle(title)
+                      setTempStreamerName(streamerName)
+                      setIsSettingDialogOpen(true)
+                    }}
                   >
                     設定
                   </SettingButton>
@@ -189,7 +194,11 @@ export default function App () {
       <ActionDialog
         title='設定'
         actionText='OK'
-        onClickAction={() => {}}
+        onClickAction={() => {
+          setTitle(tempTitle)
+          setStreamerName(tempStreamerName)
+          setIsSettingDialogOpen(false)
+        }}
         onClickClose={() => {
           setIsSettingDialogOpen(false)
         }}
@@ -199,18 +208,18 @@ export default function App () {
         <Stack>
           <FormControl label='配信タイトル'>
             <Input
-              value={title}
+              value={tempTitle}
               onChange={e => {
-                setTitle(e.target.value)
+                setTempTitle(e.target.value)
               }}
               width='100%'
             />
           </FormControl>
           <FormControl label='配信者名'>
             <Input
-              value={streamerName}
+              value={tempStreamerName}
               onChange={e => {
-                setStreamerName(e.target.value)
+                setTempStreamerName(e.target.value)
               }}
               width='100%'
             />
