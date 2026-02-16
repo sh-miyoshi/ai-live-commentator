@@ -11,7 +11,7 @@ const theme = createTheme()
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <IntlProvider locale="ja">
+    <IntlProvider locale="en">
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>

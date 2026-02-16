@@ -8,6 +8,7 @@ import {
   DropdownContent,
   DropdownTrigger,
   FaEllipsisIcon,
+  FormControl,
   Heading,
   Input,
   Stack,
@@ -29,12 +30,14 @@ export default function App () {
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined)
   const [sendMessage, setSendMessage] = useState('')
   const [isSettingDialogOpen, setIsSettingDialogOpen] = useState(false)
+  const [title, setTitle] = useState('雑談配信')
+  const [streamerName, setStreamerName] = useState('配信者')
+
+  // WIP: title, streamerNameは固定する
 
   const lastMessageRef = useRef('こんにちはー')
   const isFetchRef = useRef(false)
 
-  const title = '雑談配信'
-  const streamerName = '配信者'
   const fetchChats = async () => {
     if (isFetchRef.current) {
       console.log('already fetching... skip')
@@ -70,13 +73,13 @@ export default function App () {
           <Avatar src='../resources/icon.png' />
           <Stack gap={0.25}>
             {intervalId ? (
-            <LiveBase padding={0.25}>
-              <Center>LIVE</Center>
-            </LiveBase>
-            ):(
-            <WaitingBase padding={0.25}>
-              <Center>待機中</Center>
-            </WaitingBase>
+              <LiveBase padding={0.25}>
+                <Center>LIVE</Center>
+              </LiveBase>
+            ) : (
+              <WaitingBase padding={0.25}>
+                <Center>待機中</Center>
+              </WaitingBase>
             )}
             <Heading>{title}</Heading>
           </Stack>
@@ -191,8 +194,28 @@ export default function App () {
           setIsSettingDialogOpen(false)
         }}
         isOpen={isSettingDialogOpen}
+        size='XS'
       >
-        テストメッセージ(タイトル、配信者名、アイコン)
+        <Stack>
+          <FormControl label='配信タイトル'>
+            <Input
+              value={title}
+              onChange={e => {
+                setTitle(e.target.value)
+              }}
+              width='100%'
+            />
+          </FormControl>
+          <FormControl label='配信者名'>
+            <Input
+              value={streamerName}
+              onChange={e => {
+                setStreamerName(e.target.value)
+              }}
+              width='100%'
+            />
+          </FormControl>
+        </Stack>
       </ActionDialog>
     </Stack>
   )
@@ -219,7 +242,7 @@ const LiveBase = styled(Base)`
 `
 
 const WaitingBase = styled(Base)`
-  background-color: #9A9493;
+  background-color: #9a9493;
   width: 52px;
 `
 
