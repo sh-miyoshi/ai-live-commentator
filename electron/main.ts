@@ -12,7 +12,7 @@ const GEMINI_MODEL_NAME = 'gemini-3-flash-preview'
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 990,
+    width: 360,
     height: 720,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'dist-electron', 'preload.js'),

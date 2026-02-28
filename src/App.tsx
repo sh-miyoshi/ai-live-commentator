@@ -137,60 +137,53 @@ export default function App () {
           </Dropdown>
         </div>
       </TitleCluster>
-      <Cluster>
-        <ContentBase radius='m' padding={1}>
-          <Center>メイン画面</Center>
-        </ContentBase>
-        <ChatDiv>
-          <Base radius='m' padding={1}>
-            <Stack>
-              <Heading>チャット</Heading>
-              {chats.map(chat => (
-                <div key={chat.id}>
-                  <ChatRow>
-                    {chat.isStreamer ? (
-                      <Avatar src='../resources/icon.png' size={24} />
-                    ) : (
-                      <UserAvatar userName={chat.user} size={24} />
-                    )}
-                    <Stack gap={0.125}>
-                      <Text size='XS'>{chat.user}</Text>
-                      <Text>{chat.message}</Text>
-                    </Stack>
-                  </ChatRow>
-                </div>
-              ))}
+        <Base radius='m' padding={1}>
+          <Stack>
+            <Heading>チャット</Heading>
+            {chats.map(chat => (
+              <div key={chat.id}>
+                <ChatRow>
+                  {chat.isStreamer ? (
+                    <Avatar src='../resources/icon.png' size={24} />
+                  ) : (
+                    <UserAvatar userName={chat.user} size={24} />
+                  )}
+                  <Stack gap={0.125}>
+                    <Text size='XS'>{chat.user}</Text>
+                    <Text>{chat.message}</Text>
+                  </Stack>
+                </ChatRow>
+              </div>
+            ))}
 
-              <Cluster>
-                <Input
-                  type='text'
-                  value={sendMessage}
-                  onChange={e => {
-                    setSendMessage(e.target.value)
-                  }}
-                />
-                <Button
-                  onClick={() => {
-                    setChats(prevChats => {
-                      const newChats = prevChats.concat({
-                        id: crypto.randomUUID(),
-                        user: streamerName,
-                        message: sendMessage,
-                        isStreamer: true
-                      })
-                      return newChats
+            <Cluster>
+              <Input
+                type='text'
+                value={sendMessage}
+                onChange={e => {
+                  setSendMessage(e.target.value)
+                }}
+              />
+              <Button
+                onClick={() => {
+                  setChats(prevChats => {
+                    const newChats = prevChats.concat({
+                      id: crypto.randomUUID(),
+                      user: streamerName,
+                      message: sendMessage,
+                      isStreamer: true
                     })
-                    lastMessageRef.current = sendMessage
-                    setSendMessage('')
-                  }}
-                >
-                  送信
-                </Button>
-              </Cluster>
-            </Stack>
-          </Base>
-        </ChatDiv>
-      </Cluster>
+                    return newChats
+                  })
+                  lastMessageRef.current = sendMessage
+                  setSendMessage('')
+                }}
+              >
+                送信
+              </Button>
+            </Cluster>
+          </Stack>
+        </Base>
       <ActionDialog
         title='設定'
         actionText='OK'
@@ -229,17 +222,6 @@ export default function App () {
     </Stack>
   )
 }
-
-// WIP: サイズは100% - チャット欄を横幅として、6:4で高さを決める
-const ContentBase = styled(Base)`
-  width: 600px;
-  height: 400px;
-  background-color: #c9c9c9;
-`
-
-const ChatDiv = styled.div`
-  width: 300px;
-`
 
 const ChatRow = styled(Cluster)`
   align-items: center;
